@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "appenfermeria-d612d",
+  "private_key_id": "85c6e5d0e9162475fbb1adfdd3e5f70cecb15f46",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCQjlWK7ORV4Ua2\n0pUVND27Wq8l5NfdpA7NeXljZNkgbUB0w/zPPckFOarES96+cZh51NVwpoSvjiKi\nDRLp7St9psiwZaDRxlLI+KVRHOcftx61BGpv7fjZ61BAz1GmMyhB9YLp5yJvD+u3\nEcT5CG9Nwnk+e0t0Ifz7E0P3wuLK4gBcLKP32fEJFyoVMzsep43U88R8Df/zb4oY\nOKjs9uf+9LUK4mC6gCF3ukKgxiwTGNg4T2Rk3Shj0PItnbo05evXJaH8AXZrzb/+\n9Sqzn2tTrmpfz2NZRsvwiXccsFRhSjJ40szjDlrmAlbfW6IC136PvRB40YfiK0M1\nnMxrRzsTAgMBAAECggEABsGQP/D4bwcbXfoTm60YYYRIgVXjvOkpA/N0d+/Dsh9J\nDuwGCc2ScpsSXyBIpc/7V15aJ2yw8N+MwNQpmSNLkBDWemAVlxhU0C3G1Dasmq/d\nUIqHSvntUooL8yt9Xm4vqH2IA9SYqGYvFxxOf3EkepbnQcNTcHcSMs3gtFi4btD1\nQLpi5txbIpYX/WLmKM+UecTT+7OJrXEdttM2LbGexT9st3WCRpZ+PXx6cL9v0Cwh\nxLpT07SbEabwVey+E/MHAAvvq8lF0lzX/Nwkng9lCKbnQHsQ/4kK905Mafg0oNMu\nkQKM4x0GTWZq/EUge3beYSzntADYA1vPb8HZP16BiQKBgQDJyh79rYuTOBF8vnCF\nyxGNBcKWmZeVEhUxO1b3pNI/vr95p8b2ULLi5CQwe6G9BhucoyoVTtjqV4BvxnkD\nVbYXI+E9Rz4Ol06QfVkrIwcA0JvvV+sFk2N56vqQbkBdgg3BotHgBoRGhvGRI3zl\nNVZ5mNmUtGIjB55edz6fyECYtQKBgQC3ZAgqEom1E7LNj1owoOrlCEApE5Agv4Vg\neS3U+kPgbSgc+XIGXLMD6AYSYH47xDJ6HF4DHFUU0o+yDcqzTcCCSTY1bI5zJMKF\nMt4m/ysWgxPTbKknJWoXEefaCedY/YHcjV1JqVA1bs01gQWJ2q4Uwcrr79me1w4J\n+NlI3jhJpwKBgDzOuLoPIwFRIwvpQ3U99WL+ul2xmRkl4tb8H7/uniDxdTfO1EkD\nlnSC9Vja2Klifs2b6aGUKg+sIJsOPwc/O+kLOePCZTP2aolmDInQO1sGggcFAmCi\nwpZJtgnx/1luSIDydLZCoHe0UHVBMXDMuutXoTGLjgsqT5H98xQpPzYFAoGAOhyh\nlatgJZgDXa3iN2yWYlL1+c4wKqBlxEdB5a4UGiacwmms3yU6uK8qVWJsPcYS9KzO\ngY/Vyg5a6GIEbELkEKTgX5dxoDzywsB2ssbCwZRxkNpq03PApWTQIkBnJcTXBKtq\n9y+GshfVQPIMbj10UjGCerb7L6EX2sMXH0cDcRsCgYAzfj7wadec2Nj5fZM1NMII\ntqKbnnFCjouKyOoPWLSsiX1g8ibKdyPph59OYmvLQNMtrNdX6/3ScLOkaCHWyYeH\njKd6NRAKMbJmzQmcpPM7fjKnmVxDJb4Bgh+/X3to38wSuhvesxS7t02R53fVk0RH\nX9HXhcWn3/16n2YuZTpZkA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-75eow@appenfermeria-d612d.iam.gserviceaccount.com",
+  "client_id": "111094269452560552074",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-75eow%40appenfermeria-d612d.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
