@@ -1,8 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
+from firebase_admin import exceptions
 
 app = Flask(__name__)
+CORS(app)
 
 # Configurar la conexión con Firebase
 cred = credentials.Certificate('api/key.json')
@@ -30,6 +33,7 @@ def add_User():
     doc_ref.set({
         'nombre': datos_user['nombre'],
         'pais': datos_user['pais'],
+        'contrasenia': datos_user['password'],
         'ciudad': datos_user['ciudad'],
         'universidad': datos_user['universidad']
     })
@@ -45,17 +49,19 @@ def verificar_usuario():
     try:
         # Obtener información del usuario por correo electrónico
         usuario = auth.get_user_by_email(email)
-
+        #print(usuario.uid)
+        informacion_adicional_ref = db.collection('usuarios').document(usuario.uid)
+        informacion_adicional = informacion_adicional_ref.get().to_dict()
+        #print(informacion_adicional['contrasenia'])
         # Si no se produce una excepción, el usuario existe
-        
-        return jsonify({"mensaje": "Usuario existe"}), 200
-
-    except auth.AuthError as e:
-        # Si hay un error de autenticación, verificar el tipo de error
-        if e.detail == 'USER_NOT_FOUND':
-            return jsonify({"mensaje": "Usuario no encontrado"}), 404
+        if contrasena == informacion_adicional['contrasenia']:
+            return jsonify({"status": True,"mensaje": "Usuario existe"}), 200
         else:
-            return jsonify({"mensaje": "Error de autenticación"}), 500
+            return jsonify({"status": False,"mensaje": "Contraseña Incorrecta"}), 200
+
+    except exceptions.FirebaseError as e:
+        # Si hay un error de autenticación, verificar el tipo de error
+        return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
 
 
 
