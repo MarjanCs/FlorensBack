@@ -64,6 +64,51 @@ def verificar_usuario():
         return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
 
 
+#Ruta para la lista de documentos de necesidades
+@app.route('/DocumentsNece', methods=['GET'])
+def get_documentsNece():
+    items = db.collection('Necesidades_14')
+    print(items)
+    nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
+    #item_list = [item.to_dict() for item in items]
+    
+    return jsonify(nombres_documentos)
+
+#Ruta para obtener una información Necesidades
+@app.route('/DocNecesidadesInfo', methods=['POST'])
+def get_NecesidadesDocInfo():
+    datos_solicitud = request.get_json()
+    doc = datos_solicitud['Document']
+    try:
+        informacion_adicional_ref = db.collection('Necesidades_14').document(doc).get().to_dict()
+
+        return jsonify(informacion_adicional_ref)
+    except Exception as e:
+        return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
+
+
+
+#Ruta para la lista de documentos de patrones
+@app.route('/DocumentsPatro', methods=['GET'])
+def get_documentspatro():
+    items = db.collection('Patrones')
+    print(items)
+    nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
+    #item_list = [item.to_dict() for item in items]
+    
+    return jsonify(nombres_documentos)
+#Ruta para obtener una informacion Patrones
+@app.route('/DocPatronesInfo', methods=['POST'])
+def get_PatronesDocInfo():
+    datos_solicitud = request.get_json()
+    doc = datos_solicitud['Document']
+    try:
+        informacion_adicional_ref = db.collection('Patrones').document(doc).get().to_dict()
+        return jsonify(informacion_adicional_ref)
+    except Exception as e:
+        return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
+
+
 
 
 # Ruta para agregar un nuevo elemento
@@ -87,4 +132,4 @@ def delete_item(item_id):
     return jsonify({"message": "Necesidad eliminada correctamente"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
