@@ -57,7 +57,7 @@ def verificar_usuario():
         if contrasena == informacion_adicional['contrasenia']:
             return jsonify({"status": True,"mensaje": "Usuario existe"}), 200
         else:
-            return jsonify({"status": False,"mensaje": "Contraseña Incorrecta"}), 200
+            return jsonify({"status": False,"mensaje": "Contraseña Incorrecta"}), 404
 
     except exceptions.FirebaseError as e:
         # Si hay un error de autenticación, verificar el tipo de error
