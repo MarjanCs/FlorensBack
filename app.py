@@ -15,9 +15,10 @@ db = firestore.client()
 # Ruta para obtener todos los elementos
 @app.route('/Necesidades', methods=['GET'])
 def get_items():
-    items = db.collection('Necesidades_14').stream()
+    
+    items = db.collection('Necesidades').document("13").collection("Ocio")
     print(items)
-    item_list = [item.to_dict() for item in items]
+    item_list = [item.to_dict() for item in items.get()]
     return jsonify(item_list)
 
 
@@ -67,25 +68,33 @@ def verificar_usuario():
 #Ruta para la lista de documentos de necesidades
 @app.route('/DocumentsNece', methods=['GET'])
 def get_documentsNece():
-    items = db.collection('Necesidades_14')
+    items = db.collection('Necesidades')
     print(items)
     nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
     #item_list = [item.to_dict() for item in items]
     
     return jsonify(nombres_documentos)
 
+@app.route('/NecesidadesLista', methods=['GET'])
+def get_NecesidadesLista():
+    items = db.collection('Necesidades').stream()
+    print(items)
+    documentos_coleccion = [doc.to_dict() for doc in items]
+    #nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
+    #item_list = [item.to_dict() for item in items]
+    
+    return jsonify(documentos_coleccion)
 #Ruta para obtener una información Necesidades
 @app.route('/DocNecesidadesInfo', methods=['POST'])
 def get_NecesidadesDocInfo():
     datos_solicitud = request.get_json()
     doc = datos_solicitud['Document']
     try:
-        informacion_adicional_ref = db.collection('Necesidades_14').document(doc).get().to_dict()
+        informacion_adicional_ref = db.collection('Necesidades').document(doc).get().to_dict()
 
         return jsonify(informacion_adicional_ref)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
-
 
 
 #Ruta para la lista de documentos de patrones
