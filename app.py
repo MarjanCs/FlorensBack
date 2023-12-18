@@ -20,6 +20,11 @@ def get_items():
     print(items)
     item_list = [item.to_dict() for item in items.get()]
     return jsonify(item_list)
+    #documentos_coleccion = db.collection('Necesidades').stream()
+    #datos_coleccion = {doc.id: doc.to_dict() for doc in documentos_coleccion}
+
+    # Presentar como JSON
+    #return jsonify(datos_coleccion)
 
 
 # Ruta para registrar usuario
@@ -79,20 +84,22 @@ def get_documentsNece():
 def get_NecesidadesLista():
     items = db.collection('Necesidades').stream()
     print(items)
-    documentos_coleccion = [doc.to_dict() for doc in items]
+    #documentos_coleccion = [doc.to_dict() for doc in items]
     #nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
     #item_list = [item.to_dict() for item in items]
+    datos_coleccion = {doc.id: doc.to_dict() for doc in items}
     
-    return jsonify(documentos_coleccion)
+    return jsonify(datos_coleccion)
 #Ruta para obtener una información Necesidades
 @app.route('/DocNecesidadesInfo', methods=['POST'])
 def get_NecesidadesDocInfo():
     datos_solicitud = request.get_json()
     doc = datos_solicitud['Document']
+    nameCollection = datos_solicitud['Name']
     try:
-        informacion_adicional_ref = db.collection('Necesidades').document(doc).get().to_dict()
-
-        return jsonify(informacion_adicional_ref)
+        informacion_adicional_ref = db.collection('Necesidades').document(doc).collection(nameCollection)
+        item_list = [item.to_dict() for item in informacion_adicional_ref.get()]
+        return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
 
