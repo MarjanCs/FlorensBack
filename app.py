@@ -73,22 +73,30 @@ def verificar_usuario():
 #Ruta para la lista de documentos de necesidades
 @app.route('/DocumentsNece', methods=['GET'])
 def get_documentsNece():
-    items = db.collection('Necesidades')
+    items = db.collection('Necesidades').stream()
     print(items)
-    nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
+    datos_coleccion = {}
+    #nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
     #item_list = [item.to_dict() for item in items]
-    
-    return jsonify(nombres_documentos)
+    for i, doc in enumerate(items):
+            # Usar el índice como ID comenzando desde 1
+            identificador = str(i + 1)
+            datos = doc.to_dict()
+            datos["Id"] = doc.id
+            datos_coleccion[identificador] = datos
+    return jsonify(datos_coleccion)
 
 @app.route('/NecesidadesLista', methods=['GET'])
 def get_NecesidadesLista():
     items = db.collection('Necesidades').stream()
     print(items)
-    #documentos_coleccion = [doc.to_dict() for doc in items]
-    #nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
-    #item_list = [item.to_dict() for item in items]
-    datos_coleccion = {doc.id: doc.to_dict() for doc in items}
-    
+    datos_coleccion = {}
+    for i, doc in enumerate(items):
+            # Usar el índice como ID comenzando desde 1
+            identificador = str(i + 1)
+            datos = doc.to_dict()
+            datos["Id"] = doc.id
+            datos_coleccion[identificador] = datos
     return jsonify(datos_coleccion)
 #Ruta para obtener una información Necesidades
 @app.route('/DocNecesidadesInfo', methods=['POST'])
