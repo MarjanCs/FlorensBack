@@ -1,6 +1,5 @@
 import pathlib
 import textwrap
-
 import google.generativeai as genai
 
 genai.configure(api_key="AIzaSyA144dpQmD-S9jCvJhXn2ih8cx2l_i89FQ")
