@@ -112,6 +112,28 @@ def get_NecesidadesDocInfo():
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
 
 
+@app.route('/EditarDocument/<nombre_documento>/<nombre_colleccion>', methods=['PUT'])
+def get_EditarParametros(nombre_documento, nombre_colleccion):
+    datos_solicitud = request.get_json()
+    Definicion = datos_solicitud ['DefinicionUpdate']
+    Titulo = datos_solicitud ['TituloUpdate']
+    Objetivo = datos_solicitud ['ObjetivoUpdate']
+    print(Definicion+"/*"+Titulo+"/*"+Objetivo)
+    try:
+        informacion_adicional_ref = db.collection('Necesidades').document(nombre_documento).collection(nombre_colleccion).document("Descripcion")
+        documento_actual = informacion_adicional_ref.get()
+        
+        if documento_actual.exists:
+            informacion_adicional_ref.update({"Objetivo": Objetivo,"Título": Titulo,"Definición": Definicion,})
+            documento_actualizado = informacion_adicional_ref.get().to_dict()
+
+            return jsonify({"mensaje": f'Documento {nombre_documento} actualizado', "datos": documento_actualizado, "status": True})
+        else:
+            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado',"status": False}), 404
+
+    except Exception as e:
+        return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
+
 #Ruta para la lista de documentos de patrones
 @app.route('/DocumentsPatro', methods=['GET'])
 def get_documentspatro():
