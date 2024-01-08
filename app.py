@@ -70,22 +70,7 @@ def verificar_usuario():
         return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
 
 
-#Ruta para la lista de documentos de necesidades
-@app.route('/DocumentsNece', methods=['GET'])
-def get_documentsNece():
-    items = db.collection('Necesidades').stream()
-    print(items)
-    datos_coleccion = {}
-    #nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
-    #item_list = [item.to_dict() for item in items]
-    for i, doc in enumerate(items):
-            # Usar el índice como ID comenzando desde 1
-            identificador = str(i + 1)
-            datos = doc.to_dict()
-            datos["Id"] = doc.id
-            datos_coleccion[identificador] = datos
-    return jsonify(datos_coleccion)
-
+### Necesidades
 @app.route('/NecesidadesLista', methods=['GET'])
 def get_NecesidadesLista():
     items = db.collection('Necesidades').stream()
@@ -134,47 +119,48 @@ def get_EditarParametros(nombre_documento, nombre_colleccion):
     except Exception as e:
         return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
 
-#Ruta para la lista de documentos de patrones
-@app.route('/DocumentsPatro', methods=['GET'])
-def get_documentspatro():
-    items = db.collection('Patrones')
+
+
+###Patrones
+@app.route('/PatronesLista', methods=['GET'])
+def get_PatronesLista():
+    items = db.collection('Patrones').stream()
     print(items)
-    nombres_documentos = [{'id': str(i+1), 'nombre': doc.id} for i, doc in enumerate(items.get())]
-    #item_list = [item.to_dict() for item in items]
-    
-    return jsonify(nombres_documentos)
+    datos_coleccion = {}
+    for i, doc in enumerate(items):
+            # Usar el índice como ID comenzando desde 1
+            identificador = str(i + 1)
+            datos = doc.to_dict()
+            datos["Id"] = doc.id
+            datos_coleccion[identificador] = datos
+    return jsonify(datos_coleccion)
+
 #Ruta para obtener una informacion Patrones
 @app.route('/DocPatronesInfo', methods=['POST'])
 def get_PatronesDocInfo():
     datos_solicitud = request.get_json()
     doc = datos_solicitud['Document']
+    nameCollection = datos_solicitud['Name']
     try:
-        informacion_adicional_ref = db.collection('Patrones').document(doc).get().to_dict()
-        return jsonify(informacion_adicional_ref)
+        informacion_adicional_ref = db.collection('Patrones').document(doc).collection(nameCollection)
+        print(nameCollection)
+        item_list = [item.to_dict() for item in informacion_adicional_ref.get()]
+        return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
 
-
-
-
-# Ruta para agregar un nuevo elemento
-@app.route('/Necesidades', methods=['POST'])
-def add_item():
-    new_item = request.get_json()
-    doc_ref = db.collection('Necesidades_14').add(new_item)
-    return jsonify({"id": doc_ref.id})
 
 # Ruta para actualizar un elemento por ID
 @app.route('/Necesidades/<string:item_id>', methods=['PUT'])
 def update_item(item_id):
     updated_item = request.get_json()
-    db.collection('Necesidades_14').document(item_id).update(updated_item)
+    db.collection('Necesidades').document(item_id).update(updated_item)
     return jsonify({"message": "Necesidad actualizada correctamente"})
 
 # Ruta para eliminar un elemento por ID
 @app.route('/Necesidades/<string:item_id>', methods=['DELETE'])
 def delete_item(item_id):
-    db.collection('Necesidades_14').document(item_id).delete()
+    db.collection('Necesidades').document(item_id).delete()
     return jsonify({"message": "Necesidad eliminada correctamente"})
 
 if __name__ == '__main__':
