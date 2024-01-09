@@ -180,6 +180,12 @@ def delete_item(item_id):
 def postChat():
     datos_solicitud = request.get_json()
     msj = datos_solicitud['Mensaje']
+    ejm = chat.send_message("Actua como profesional enfermero y responde preguntas solo en el ambito de enfermeria,"+ 
+                      "si te preguntan fuera de esa área contesta con: "+
+                      "'Mi ambito de conocimiento esta basado en el ámbito de enfermeria, "+
+                      "porfavor ingresa una intruccion en esa área.'")
+    for chunk in ejm:
+        print(chunk.text)
     response = chat.send_message(msj)
     ConjuntoDatos = ""
     for chunk in response:
