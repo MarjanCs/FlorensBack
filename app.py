@@ -1,8 +1,20 @@
+#Importacion de libreria para la creación de rutas
 from flask import Flask, jsonify, request
+#importacion de libreria para el uso de cors en el sistema
 from flask_cors import CORS
+#Importacion de librerias para el uso de firebase
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from firebase_admin import exceptions
+#Importacion de la libreria para el uso de la IA de Google
+import google.generativeai as genai
+
+#Configuracion de la Clave para el uso de la IA de Google
+genai.configure(api_key="AIzaSyA144dpQmD-S9jCvJhXn2ih8cx2l_i89FQ")
+#Configurar el modelo de red neuronal para el uso de la IA
+model = genai.GenerativeModel('gemini-pro')
+chat = model.start_chat(history=[])
+chat
 
 app = Flask(__name__)
 CORS(app)
@@ -162,6 +174,17 @@ def update_item(item_id):
 def delete_item(item_id):
     db.collection('Necesidades').document(item_id).delete()
     return jsonify({"message": "Necesidad eliminada correctamente"})
+
+
+@app.route('/Chat/Chatbot', methods=['POST'])
+def postChat():
+    datos_solicitud = request.get_json()
+    msj = datos_solicitud['Mensaje']
+    response = chat.send_message(msj)
+    ConjuntoDatos = ""
+    for chunk in response:
+        ConjuntoDatos=ConjuntoDatos + chunk.text
+    return jsonify({"Respuesta": ConjuntoDatos})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
