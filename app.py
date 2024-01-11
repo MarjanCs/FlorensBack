@@ -53,7 +53,8 @@ def add_User():
         'pais': datos_user['pais'],
         'contrasenia': datos_user['password'],
         'ciudad': datos_user['ciudad'],
-        'universidad': datos_user['universidad']
+        'universidad': datos_user['universidad'],
+        'rol': datos_user['rol']
     })
     return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
 
@@ -73,7 +74,7 @@ def verificar_usuario():
         #print(informacion_adicional['contrasenia'])
         # Si no se produce una excepción, el usuario existe
         if contrasena == informacion_adicional['contrasenia']:
-            return jsonify({"status": True,"mensaje": "Usuario existe"}), 200
+            return jsonify({"status": True,"mensaje": "Usuario existe","rol":informacion_adicional['rol'],"usuario":email}), 200
         else:
             return jsonify({"status": False,"mensaje": "Contraseña Incorrecta"}), 404
 
@@ -108,6 +109,31 @@ def get_NecesidadesDocInfo():
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
 
+###Dominios
+@app.route('/DominiosLista', methods=['GET'])
+def get_DominiosLista():
+    items = db.collection('Dominios').stream()
+    print(items)
+    datos_coleccion = {}
+    for i, doc in enumerate(items):
+            # Usar el índice como ID comenzando desde 1
+            identificador = str(i + 1)
+            datos = doc.to_dict()
+            datos["Id"] = doc.id
+            datos_coleccion[identificador] = datos
+    return jsonify(datos_coleccion)
+#Ruta para obtener una información dominios
+@app.route('/DocDominiosInfo', methods=['POST'])
+def get_DominiosDocInfo():
+    datos_solicitud = request.get_json()
+    doc = datos_solicitud['Document']
+    nameCollection = datos_solicitud['Name']
+    try:
+        informacion_adicional_ref = db.collection('Dominios').document(doc).collection(nameCollection)
+        item_list = [item.to_dict() for item in informacion_adicional_ref.get()]
+        return jsonify(item_list)
+    except Exception as e:
+        return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
 
 @app.route('/EditarDocument/<nombre_documento>/<nombre_colleccion>', methods=['PUT'])
 def get_EditarParametros(nombre_documento, nombre_colleccion):
