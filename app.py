@@ -27,7 +27,6 @@ db = firestore.client()
 # Ruta para obtener todos los elementos
 @app.route('/Necesidades', methods=['GET'])
 def get_items():
-    
     items = db.collection('Necesidades').document("13").collection("Ocio")
     print(items)
     item_list = [item.to_dict() for item in items.get()]
@@ -74,7 +73,7 @@ def verificar_usuario():
         #print(informacion_adicional['contrasenia'])
         # Si no se produce una excepción, el usuario existe
         if contrasena == informacion_adicional['contrasenia']:
-            return jsonify({"status": True,"mensaje": "Usuario existe","rol":informacion_adicional['rol'],"usuario":email}), 200
+            return jsonify({"status": True,"mensaje": "Usuario existe","rol":informacion_adicional['rol'],"usuario":usuario.uid},), 200
         else:
             return jsonify({"status": False,"mensaje": "Contraseña Incorrecta"}), 404
 
@@ -82,6 +81,19 @@ def verificar_usuario():
         # Si hay un error de autenticación, verificar el tipo de error
         return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
 
+
+@app.route('/BibliografiasList/<string:nombre_documento>', methods=['GET'])
+def get_Bibliografia(nombre_documento):
+    try:
+        informacion_adicional_ref = db.collection('Bibliografia').document(nombre_documento)
+        documento = informacion_adicional_ref.get()
+        if documento.exists:
+            datos_documento = documento.to_dict()
+            return jsonify({"Bibliografias": datos_documento, "status": True})
+        else:
+            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado', "status": False}), 404
+    except Exception as e:
+        return jsonify({"mensaje": f'Error al obtener la información: {e}', "status": False}), 500
 
 ### Necesidades
 @app.route('/NecesidadesLista', methods=['GET'])
@@ -108,6 +120,31 @@ def get_NecesidadesDocInfo():
         return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
+    
+@app.route('/EditarDocumentNecesidades/<string:nombre_documento>/<string:nombre_colleccion>', methods=['PUT'])
+def get_EditarParametros(nombre_documento, nombre_colleccion):
+    datos_solicitud = request.get_json()
+    Definicion = datos_solicitud ['DefinicionUpdate']
+    Titulo = datos_solicitud ['TituloUpdate']
+    Objetivo = datos_solicitud ['ObjetivoUpdate']
+    Afecciones = datos_solicitud ['AfeccionesUpdate']
+    Cuidados = datos_solicitud ['CuidadosUpdate']
+    print(Definicion+"/*"+Titulo+"/*"+Objetivo)
+    try:
+        informacion_adicional_ref = db.collection('Necesidades').document(nombre_documento).collection(nombre_colleccion).document("Descripcion")
+        documento_actual = informacion_adicional_ref.get()
+        
+        if documento_actual.exists:
+            informacion_adicional_ref.update({"Objetivo": Objetivo,"Titulo": Titulo,"Definicion": Definicion,"Afecciones":Afecciones,"Cuidados":Cuidados})
+            documento_actualizado = informacion_adicional_ref.get().to_dict()
+
+            return jsonify({"mensaje": f'Documento {nombre_documento} actualizado', "datos": documento_actualizado, "status": True})
+        else:
+            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado',"status": False}), 404
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
 
 ###Dominios
 @app.route('/DominiosLista', methods=['GET'])
@@ -134,28 +171,6 @@ def get_DominiosDocInfo():
         return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
-
-@app.route('/EditarDocument/<nombre_documento>/<nombre_colleccion>', methods=['PUT'])
-def get_EditarParametros(nombre_documento, nombre_colleccion):
-    datos_solicitud = request.get_json()
-    Definicion = datos_solicitud ['DefinicionUpdate']
-    Titulo = datos_solicitud ['TituloUpdate']
-    Objetivo = datos_solicitud ['ObjetivoUpdate']
-    print(Definicion+"/*"+Titulo+"/*"+Objetivo)
-    try:
-        informacion_adicional_ref = db.collection('Necesidades').document(nombre_documento).collection(nombre_colleccion).document("Descripcion")
-        documento_actual = informacion_adicional_ref.get()
-        
-        if documento_actual.exists:
-            informacion_adicional_ref.update({"Objetivo": Objetivo,"Título": Titulo,"Definición": Definicion,})
-            documento_actualizado = informacion_adicional_ref.get().to_dict()
-
-            return jsonify({"mensaje": f'Documento {nombre_documento} actualizado', "datos": documento_actualizado, "status": True})
-        else:
-            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado',"status": False}), 404
-
-    except Exception as e:
-        return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
 
 
 
@@ -186,6 +201,32 @@ def get_PatronesDocInfo():
         return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
+
+@app.route('/EditarDocumentPatron/<string:nombre_documento>/<string:nombre_colleccion>', methods=['PUT'])
+def get_EditarPatrones(nombre_documento, nombre_colleccion):
+    datos_solicitud = request.get_json()
+    Definicion = datos_solicitud ['DefinicionUpdate']
+    Titulo = datos_solicitud ['TituloUpdate']
+    Resultados = datos_solicitud ['ResultadoUpdate']
+    Alteraciones = datos_solicitud ['AlteracionesUpdate']
+    Valorar = datos_solicitud ['ValorarUpdate']
+    try:
+        informacion_adicional_ref = db.collection('Patrones').document(nombre_documento).collection(nombre_colleccion).document("Descripcion")
+        documento_actual = informacion_adicional_ref.get()
+        
+        if documento_actual.exists:
+            informacion_adicional_ref.update({"Titulo": Titulo,"Definicion": Definicion,"Resultados":Resultados,"Alteraciones":Alteraciones,"Valoraciones":Valorar})
+            documento_actualizado = informacion_adicional_ref.get().to_dict()
+            print(documento_actualizado)
+            return jsonify({"mensaje": f'Documento {nombre_documento} actualizado', "datos": documento_actualizado, "status": True})
+        else:
+            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado',"status": False}), 404
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
+
+
 
 
 # Ruta para actualizar un elemento por ID

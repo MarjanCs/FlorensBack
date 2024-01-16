@@ -11,14 +11,14 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 data = {
-  "Título": "Valores",
-  "Definición": "Se centra en creencias, valores y perspectivas de la vida y describe cómo afectan la salud física y mental, y cómo se pueden ajustar o cambiar para mejorar la salud.",
-  "Que Valora": {
+  "Titulo": "Valores",
+  "Definicion": "Se centra en creencias, valores y perspectivas de la vida y describe cómo afectan la salud física y mental, y cómo se pueden ajustar o cambiar para mejorar la salud.",
+  "Valoraciones": {
     "Prácticas religiosas, creencias y tradiciones culturales": "Influencia en la salud y cómo se alinean con las expectativas del paciente.",
     "Metas y logros personales, satisfacción con la vida actual": "Impacto en la salud y bienestar del individuo.",
     "Conflictos en valores, creencias y expectativas relacionadas con la salud": "Identificación de discrepancias que afectan las decisiones de tratamiento."
   },
-  "Alteraciones del Patrón": [
+  "Alteraciones": [
     "Conflictos con creencias personales o prácticas religiosas.",
     "Problemas con la práctica religiosa o conflictos con valores.",
     "Preocupación por el significado de la vida, la muerte, el dolor o la enfermedad.",
@@ -33,6 +33,7 @@ data = {
   ],
   "Img": "https://i.postimg.cc/50dCv1GT/11.png"
 }
+
 
 doc_ref = db.collection("Patrones").document("11").collection("Valores").document("Descripcion")
 doc_ref.set(data)
