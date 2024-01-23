@@ -81,7 +81,7 @@ def verificar_usuario():
         # Si hay un error de autenticación, verificar el tipo de error
         return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
 
-
+#### Bibliografias
 @app.route('/BibliografiasList/<string:nombre_documento>', methods=['GET'])
 def get_Bibliografia(nombre_documento):
     try:
@@ -94,6 +94,26 @@ def get_Bibliografia(nombre_documento):
             return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado', "status": False}), 404
     except Exception as e:
         return jsonify({"mensaje": f'Error al obtener la información: {e}', "status": False}), 500
+
+####Ruta par guardar las bibliografias
+@app.route('/EditarDocumentBibliografia/', methods=['POST'])    
+def crear_Bibliografia():
+    datos_solicitud = request.get_json()
+    Bibliografia = datos_solicitud['UpdateBibliografia']
+    print(Bibliografia)
+    NombreDocument = datos_solicitud['Name']
+    try:
+        doc_ref = db.collection("Bibliografia").document(NombreDocument)
+        resultado = doc_ref.set(Bibliografia)
+        if resultado.update_time:
+            return jsonify({"status": True,"mensaje": "Informacion actualizada en Necesidades en la Bibliografia"}), 200
+        else:
+            return jsonify({"status": False,"mensaje": "Problema al actualizar las nuevas Bibliografias"}), 404
+
+    except exceptions.FirebaseError as e:
+        # Si hay un error de autenticación, verificar el tipo de error
+        return jsonify({"mensaje": "Usuario no encontrado","status": False,}), 404
+
 
 ### Necesidades
 @app.route('/NecesidadesLista', methods=['GET'])
@@ -225,6 +245,7 @@ def get_EditarPatrones(nombre_documento, nombre_colleccion):
     except Exception as e:
         print(e)
         return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
+
 
 
 
