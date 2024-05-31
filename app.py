@@ -31,11 +31,6 @@ def get_items():
     print(items)
     item_list = [item.to_dict() for item in items.get()]
     return jsonify(item_list)
-    #documentos_coleccion = db.collection('Necesidades').stream()
-    #datos_coleccion = {doc.id: doc.to_dict() for doc in documentos_coleccion}
-
-    # Presentar como JSON
-    #return jsonify(datos_coleccion)
 
 
 # Ruta para registrar usuario
@@ -179,6 +174,7 @@ def get_DominiosLista():
             datos["Id"] = doc.id
             datos_coleccion[identificador] = datos
     return jsonify(datos_coleccion)
+
 #Ruta para obtener una información dominios
 @app.route('/DocDominiosInfo', methods=['POST'])
 def get_DominiosDocInfo():
