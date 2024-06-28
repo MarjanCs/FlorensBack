@@ -10,7 +10,7 @@ from firebase_admin import exceptions
 import google.generativeai as genai
 
 #Configuracion de la Clave para el uso de la IA de Google
-genai.configure(api_key="AIzaSyA144dpQmD-S9jCvJhXn2ih8cx2l_i89FQ")
+genai.configure(api_key="AIzaSyB43im5LCSxDuV1iLa96jugVafw43gbRJs")
 #Configurar el modelo de red neuronal para el uso de la IA
 model = genai.GenerativeModel('gemini-pro')
 chat = model.start_chat(history=[])
