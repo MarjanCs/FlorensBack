@@ -217,6 +217,28 @@ def get_PatronesDocInfo():
         return jsonify(item_list)
     except Exception as e:
         return jsonify({"mensaje": "Error al obtener la Información","status": False,}), 404
+    
+@app.route('/EditarDocumentDominio/<string:nombre_documento>/<string:nombre_colleccion>', methods=['PUT'])
+def get_EditarDominios(nombre_documento, nombre_colleccion):
+    datos_solicitud = request.get_json()
+    Definicion = datos_solicitud ['DefinicionUpdate']
+    Titulo = datos_solicitud ['TituloUpdate']
+    Clases = datos_solicitud ['ClasesUpdate']
+    try:
+        informacion_adicional_ref = db.collection('Dominios').document(nombre_documento).collection(nombre_colleccion).document("Descripcion")
+        documento_actual = informacion_adicional_ref.get()
+        
+        if documento_actual.exists:
+            informacion_adicional_ref.update({"Titulo": Titulo,"Definicion": Definicion,"Clases":Clases})
+            documento_actualizado = informacion_adicional_ref.get().to_dict()
+            print(documento_actualizado)
+            return jsonify({"mensaje": f'Documento {nombre_documento} actualizado', "datos": documento_actualizado, "status": True})
+        else:
+            return jsonify({"mensaje": f'Documento {nombre_documento} no encontrado',"status": False}), 404
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": f'Error al editar el documento: {e}',"status": False}), 500
 
 @app.route('/EditarDocumentPatron/<string:nombre_documento>/<string:nombre_colleccion>', methods=['PUT'])
 def get_EditarPatrones(nombre_documento, nombre_colleccion):
