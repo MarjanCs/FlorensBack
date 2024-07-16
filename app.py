@@ -12,7 +12,7 @@ import google.generativeai as genai
 #Configuracion de la Clave para el uso de la IA de Google
 genai.configure(api_key="AIzaSyB43im5LCSxDuV1iLa96jugVafw43gbRJs")
 #Configurar el modelo de red neuronal para el uso de la IA
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-flash')
 chat = model.start_chat(history=[])
 chat
 
